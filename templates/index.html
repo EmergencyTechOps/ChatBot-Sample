@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Q&A Chatbot 🤖</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            display: inline-block;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #333;
+        }
+        .logo {
+            width: 100px;
+            margin-bottom: 10px;
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #answer {
+            font-size: 18px;
+            color: #444;
+            margin-top: 10px;
+            padding: 10px;
+            background: #e9f5ff;
+            border-radius: 8px;
+            display: inline-block;
+            max-width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="https://avatars.githubusercontent.com/u/187172337?v=4" alt="Logo" class="logo">
+        <h1>Ask Me Anything! 🤔💡</h1>
+        <form id="questionForm">
+            <input type="text" id="question" placeholder="Type your question here... ✍️" required />
+            <button type="submit">🚀 Ask Now</button>
+        </form>
+        <h2>Answer 🎯:</h2>
+        <div id="answer">🔍 Waiting for your question...</div>
+    </div>
+
+    <script>
+        document.getElementById("questionForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            const question = document.getElementById("question").value;
+            document.getElementById("answer").innerHTML = "⏳ Thinking...";
+            fetch("/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ question: question })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("answer").innerHTML = "✅ " + data.answer;
+            })
+            .catch(error => {
+                document.getElementById("answer").innerHTML = "❌ Error fetching answer.";
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
